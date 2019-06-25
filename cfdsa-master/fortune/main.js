@@ -39,6 +39,20 @@ app.get('/health', (req, resp) => {
 	resp.end(`OK ${new Date()}`);
 })
 
+// app.get('/ready', (req, resp) => {
+// 	resp.status(ready? 200: 400).end();
+// })
+
+// pool.getConnection((err, conn) => {
+// 	conn.ping((err) => {
+// 	ready = !err;
+// 	})
+// })
+
+process.on('SIGTERM', () => {
+	//Received SIGTERM -perform clean up
+})
+
 app.get(/.*/, express.static(join(__dirname, 'public')));
 
 app.use((req, resp) => {
