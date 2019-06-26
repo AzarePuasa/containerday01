@@ -1,7 +1,7 @@
 #base image 
 FROM node:latest
 
-ENV DB_HOST=nwdb DB_PORT=3306 \ 
+ENV DB_HOST=db DB_PORT=3306 \ 
 DB_USER=root DB_PASSWORD=changeit \
 APP_PORT=3000 APP_DIR=/app
 

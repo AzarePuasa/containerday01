@@ -96,7 +96,7 @@ app.get(['/api/customers', '/customers', '/'], (req, resp, next) => {
 			resp.status(200)
 			resp.format({
 				'text/html': () => {
-					resp.render('customers.hbs', { customer: result, ip_address: INSTANCE_IP_ADDRESS })
+					resp.render('customers.hbs', { customer: result, ip_address: INSTANCE_IP_ADDRESS, layout: false})
 				},
 				'application/json': () => {
 					resp.json(result)
@@ -119,7 +119,7 @@ app.get(['/api/customer/:id', '/customer/:id'], (req, resp) => {
 				resp.status(200)
 				resp.format({
 					'text/html': () => {
-						resp.render('customer.hbs', { customer: result[0] })
+						resp.render('customer.hbs', { customer: result[0], layout: false})
 					},
 					'application/json': () => {
 						resp.json(result[0])
@@ -222,4 +222,3 @@ setTimeout(function pingDB() {
 	})
 
 }, RETRY_INTERVAL) 
-
