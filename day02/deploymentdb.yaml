@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bgg-db-deployment
+  namespace: workshop02
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+        app.kubernetes.io/name: bgg-db
+   template:
+    metadata:
+      name: bgg-db
+      namespace: workshop02
+      labels:
+        app.kubernetes.io/name: bgg-db
+        app.kubernetes.io/version: "v1"
+        owner: development
+    spec:
+      containers:
+      - name: bgg-db
+        image: stackupiss/bgg-db:v1
+        imagePullPolicy: Always
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "changeit"
+        - name: MYSQL_DATABASE
+          value: bgg
+        ports:
+        - name: bgg-db-port
+          containerPort: 3306        

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fortune-deployment
+  namespace: workshop02
+spec:
+   replicas: 2
+   selector:
+      matchLabels:
+        app.kubernetes.io/name: azare-fortune-pod
+   template:
+    metadata:
+      name: azare-fortune-pod
+      namespace: default
+      labels:
+        app.kubernetes.io/name: azare-fortune-pod
+        app.kubernetes.io/version: "v2"
+        owner: development
+    spec:
+      containers:
+      - name: fortune
+        image: azarepuasa/fortune:v2
+        imagePullPolicy: Always
+        env:
+        - name: APP_PORT
+          value: "3000"
+        ports:
+        - name: fortune-port
+          containerPort: 3000

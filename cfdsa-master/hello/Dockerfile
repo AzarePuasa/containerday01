@@ -11,8 +11,8 @@ ADD public public
 
 RUN npm install
 
-HEALTHCHECK --interval=5m --timeout=5s \
-	CMD curl -f http://localhost:${APP_PORT} || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+	CMD curl -s -f http://localhost:${APP_PORT}/ready > /dev/null || exit 1
 
 EXPOSE ${APP_PORT}
 
