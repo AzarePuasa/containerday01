@@ -1,4 +1,4 @@
-# Docker, Kubernetes, Helm, Istion
+# Docker, Kubernetes, Helm, Istio
 
 The files for the Lesson covered in the containerization course.
 
