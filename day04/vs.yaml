@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1alpha3
+
+kind: VirtualService
+
+metadata:
+  name: fapp-vs
+
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - fapp-gateway
+
+  http:
+  - match:
+    - uri:
+        exact: /
+    route:
+    - destination:
+        host: fortuneappsvc
+        port:
+          number: 80
+    rewrite:
+      uri: /

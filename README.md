@@ -1,6 +1,6 @@
 # Docker, Kubernetes, Helm, Istio
 
-The files for the Lesson covered in the containerization course.
+The files for the Lesson covered in the NICF - Containers for Deploying and Scaling Apps.
 
 ## Day 01 
 Docker

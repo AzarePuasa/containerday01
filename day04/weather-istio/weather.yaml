@@ -1,0 +1,51 @@
+# APP_ID
+# APP_DEFAULT_CITY
+# stackupiss/weather:v1
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  weatherapp
+  labels:
+    name:  weatherapp
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+         name: weatherapp
+  template:
+    metadata:
+      labels:
+        name:  weatherapp
+    spec:
+      containers:
+      - image:  stackupiss/weather:v1
+        name:  weatherapp
+        resources:
+          requests:
+            cpu: "20m"
+            memory: "55M"
+        env:
+        - name: APP_ID
+          value: "8a81d247d650cb16469c4ba3ceb7d265"
+        - name: APP_DEFAULT_CITY
+          value: "Singapore"
+        ports:
+        - containerPort:  3000
+          name:  weatherappport
+        imagePullPolicy: Always
+      restartPolicy: Always
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  weatherappsvc
+spec:
+  selector:
+    name:  weatherapp
+  type:  ClusterIP
+  ports:
+  - name:  weatherappsvcport
+    port:  80
+    targetPort:  3000

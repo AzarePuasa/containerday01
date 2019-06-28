@@ -3,13 +3,13 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    name: fortuneapp
-  name: fortuneapp
+    name: weatherapp
+  name: weatherapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: fortuneapp
+      name: weatherapp
   strategy: {}
   template:
     metadata:
@@ -17,18 +17,23 @@ spec:
         sidecar.istio.io/status: '{"version":"761ebc5a63976754715f22fcf548f05270fb4b8db07324894aebdb31fa81d960","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
       creationTimestamp: null
       labels:
-        name: fortuneapp
+        name: weatherapp
     spec:
       containers:
-      - image: balanus/fapp:v1
+      - env:
+        - name: APP_ID
+          value: 8a81d247d650cb16469c4ba3ceb7d265
+        - name: APP_DEFAULT_CITY
+          value: Singapore
+        image: stackupiss/weather:v1
         imagePullPolicy: Always
-        name: fortuneapp
+        name: weatherapp
         ports:
         - containerPort: 3000
-          name: fortuneport
+          name: weatherappport
         resources:
           requests:
-            cpu: 50m
+            cpu: 20m
             memory: 55M
       - args:
         - proxy
@@ -40,7 +45,7 @@ spec:
         - --binaryPath
         - /usr/local/bin/envoy
         - --serviceCluster
-        - fortuneapp.default
+        - weatherapp.default
         - --drainDuration
         - 45s
         - --parentShutdownDuration
@@ -90,7 +95,7 @@ spec:
           value: "3000"
         - name: ISTIO_METAJSON_LABELS
           value: |
-            {"name":"fortuneapp"}
+            {"name":"weatherapp"}
         image: docker.io/istio/proxyv2:1.2.0
         imagePullPolicy: IfNotPresent
         name: istio-proxy
@@ -168,13 +173,13 @@ status: {}
 kind: Service
 apiVersion: v1
 metadata:
-  name:  fortuneappsvc
+  name:  weatherappsvc
 spec:
   selector:
-    name: fortuneapp
+    name:  weatherapp
   type:  ClusterIP
   ports:
-  - name:  http
+  - name:  weatherappsvcport
     port:  80
     targetPort:  3000
 ---
