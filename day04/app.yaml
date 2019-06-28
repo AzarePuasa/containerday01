@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name:  fortuneapp
+  labels:
+    name:  fortuneapp
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+         name: fortuneapp
+  template:
+    metadata:
+      labels:
+        name:  fortuneapp
+    spec:
+      containers:
+      - image: balanus/fapp:v1
+        name:  fortuneapp
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "55M"
+        ports:
+        - containerPort:  3000
+          name:  fortuneport
+        imagePullPolicy: Always
+      restartPolicy: Always  
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name:  fortuneappsvc
+spec:
+  selector:
+    name: fortuneapp
+  type:  ClusterIP
+  ports:
+  - name:  http
+    port:  80
+    targetPort:  3000
+Collapse
+
+
+
+Message Input

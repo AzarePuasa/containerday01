@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+   name: bgg-app-deployment-v1
+   namespace: workshop02
+
+spec:
+   replicas: 2
+   selector:
+      matchLabels:
+         app.kubernetes.io/name: bgg-app-pod
+         app.kubernetes.io/version: "v1"
+
+   template:
+      metadata:
+         name: bgg-db-pod
+         labels:
+            app.kubernetes.io/name: bgg-app-pod
+            app.kubernetes.io/version: "v1"
+
+      spec:
+         containers:
+         - name: bgg-app-container
+           image: stackupiss/bgg-app:v1
+           imagePullPolicy: Always
+           resources:
+              requests:
+                 cpu: 100m
+           env:
+           - name: APP_PORT
+             value: "3000"
+           - name: BGG_DB_HOST
+             value: "bgg-db-svc.workshop02.svc.cluster.local"
+           ports:
+           - name: bgg-app-port
+             containerPort: 3000
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+   name: bgg-app-svc-v1
+   namespace: workshop02
+   labels:
+      name: bgg-app-svc-v1
+
+spec:
+   type: ClusterIP
+   selector:
+      app.kubernetes.io/name: bgg-app-pod
+      app.kubernetes.io/version: "v1"
+   ports:
+   - name: bgg-app-svc-port
+     port: 80
+     targetPort: bgg-app-port

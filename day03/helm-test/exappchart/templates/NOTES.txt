@@ -1,0 +1,2 @@
+1. Get the application URL by running these commands:
+Hope you know how to use k8s.

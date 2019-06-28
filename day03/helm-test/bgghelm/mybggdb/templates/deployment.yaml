@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+   name: bgg-db-deployment
+   namespace: workshop02
+
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app.kubernetes.io/name: bgg-db-pod
+
+   template:
+      metadata:
+         name: bgg-db-pod
+         labels:
+            app.kubernetes.io/name: bgg-db-pod
+            app.kubernetes.io/version: "v1"
+
+      spec:
+         volumes:
+         - name: data-volume
+           persistentVolumeClaim: 
+            claimName: bggdbpvc
+         initContainers:
+            - name: mydb-vol-scrub
+              image: busybox
+              command: ["/bin/sh", "-c", "test -e /scrub && rm -rf /scrub/..?* /scrub/.[!.]* /scrub/*  && test -z \"$(ls -A /scrub)\" || exit 1"]
+              volumeMounts:
+              - name: data-volume
+                mountPath: /scrub
+         containers:
+         - name: bgg-db-container
+           image: stackupiss/bgg-db:v1
+           imagePullPolicy: Always
+           ports:
+           - name: mysql-port
+             containerPort: 3306
